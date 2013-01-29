@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *.class
 
 # Package Files #
@@ -5,4 +6,13 @@
 *.war
 *.ear
 
+=======
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+>>>>>>> Uppgit1-2 Datastrukturer
 .metadata/*
