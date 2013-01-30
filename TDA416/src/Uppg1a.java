@@ -1,156 +1,129 @@
-
+/**
+ * @author Gustav Alm Rosenblad (910624-3570) & Lukas Kurtyan (910429-5614)
+ */
 public class Uppg1a {
+
 	
-	public static void main(String[] args){
-		
-		Uppg1a theList = new Uppg1a();
-		
-		
-		//TEST ADDFIRST
-		theList.addFirst("0");
-		System.out.println("*" + theList +  " # bör vara 0 i först");
-		
-		//TEST PROPER RESIZING
-		for (int i = 1; i < 10; i++) {
-			theList.addFirst("" + i);
-		}
-		
-		//TEST GETFIRST
-		System.out.println("*" + theList.getFirst() +  " # bör vara 9");
-		
-		//TEST REMOVEFIRST
-		theList.removeFirst();
-		System.out.println("*" + theList  +  " # bör vara [ 8, 7, 6, 5, 4, 3, 2, 1, 0 ]");
-		
-		//TEST ISEMPTY
-		while(!theList.empty()){
-			theList.removeFirst();
-		}
-		System.out.println("*" + theList +  " # bör vara tom");
-		
-		//TEST EXISTP
-		for (int i = 1; i < 10; i++) {
-			theList.addFirst("" + i);
-		}
-		if(!theList.existP("5")){
-			System.out.println("Error: existP can't find strings!");
-		} else if(theList.existP("19")){
-			System.out.println("Error: existP returns true for strings that aren't there!");
-		} else {
-			System.out.println("existP works properly");
-		}
-		
-		System.out.println("All tests completed.");
-	}
-	
-	public static final int DEFAULT_SIZE = 10;
-	private String[] strings;
+	private static final int DEFAULT_INITIAL_CAPACITY = 10;
+
+	private String[] sequence;
 	private int size;
-	
+
 	/**
-	 * Constructs a sequence starting with size size.
-	 * @param size Starting size.
+	 * Creates a sequence with an initial capacity of 10
 	 */
-	public Uppg1a(int size){
-		this.strings = new String[size];
+	public Uppg1a() {
+		this(DEFAULT_INITIAL_CAPACITY);		
+	}
+
+	/**
+	 * Creates a sequence with a specified initialcapacity
+	 * @param initialCapacity
+	 */
+	public Uppg1a(int initialCapacity) {
+		if(initialCapacity <= 0){
+			throw new IllegalArgumentException("InitialCapacity must be greater than zero.");
+		}
+		this.sequence = new String[initialCapacity];		
 		this.size = 0;
 	}
-	
+
 	/**
-	 * Constructs a sequence with the default size.
-	 */
-	public Uppg1a(){
-		this(DEFAULT_SIZE);
-	}
-	
-	/**
-	 * Adds an element to the beginning of the sequence.
+	 * Adds the parameter element to the beginning of the sequence
 	 * @param element
 	 */
-	public void addFirst(String element){
-		if (this.isFull()){
-			doubleSize();
+	public void addFirst(String element)
+	{
+		if(this.size == this.sequence.length){
+			this.realloc();
 		}
-		for (int i = this.strings.length - 1; i > 0; i--) {
-			this.strings[i] = this.strings[i - 1];
+		
+		
+		for (int i = this.size; i > 0; i--) {
+			this.sequence[i] = this.sequence[i - 1];
 		}
-		this.strings[0] = element;
+
+		this.sequence[0] = element;
 		this.size++;
 	}
-	
-	private boolean isFull(){
-		return this.size >= this.strings.length;
-	}
-	
-	private void doubleSize(){
-		String[] newArray = new String[this.strings.length * 2];
-		for (int i = 0; i < this.strings.length; i++) {
-			newArray[i] = this.strings[i];
-		}
-		this.strings = newArray;
-	}
-	
+
 	/**
-	 * Returns true if the sequence is empty.
-	 * @return True if the sequence is empty.
+	 * @return True if the sequence is empty
 	 */
-	public boolean empty(){
+	public boolean empty() {
 		return this.size == 0;
 	}
-	
+
 	/**
-	 * Gets the first element of the sequence.
-	 * @return The first element of the sequence.
+	 * @return The first element of the sequence
 	 */
-	public String getFirst(){
-		return this.strings[0];
+	public String getFirst() {
+		return this.sequence[0];		
 	}
-	
+
 	/**
-	 * Removes the first element of the sequence.
-	 * @return false if the sequence was empty.
+	 * Removes the first element of the sequence
 	 */
-	public boolean removeFirst(){
-		if (this.size == 0){
-			return false;
+	public void removeFirst() {
+		if(this.size == 0)
+			return;
+		
+		for (int i = 1; i < this.size; i++) {
+			this.sequence[i - 1] = this.sequence[i];
 		}
-		for (int i = 0; i < this.strings.length - 1; i++) {
-			this.strings[i] = this.strings[i + 1];
-		}
-		this.strings[this.strings.length - 1] = null;
+
 		this.size--;
-		return true;
 	}
-	
+
 	/**
-	 * Searches the sequence for element elem.
+	 * Searches the sequence for the parameter elem
 	 * @param elem String to search for
-	 * @return True if elem exists in sequence
+	 * @return true if elem was present
 	 */
-	public boolean existP(String elem){
+	public boolean existP(String elem) {
 		for (int i = 0; i < this.size; i++) {
-			if(this.strings[i].equals(elem)){
+			if(checkElementEquals(this.sequence[i], elem))
 				return true;
-			}
-		}
+		}		
 		return false;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
+	@Override 
 	public String toString(){
 		StringBuilder builder = new StringBuilder();
 		builder.append("[ ");
-		if(!this.empty()) {
-			for (int i = 0; i < this.size - 1; i++) {
-				builder.append(this.strings[i]);
-				builder.append(", ");
-			}
-			builder.append(this.strings[this.size - 1]);
+		for (int i = 0; i < this.size - 1; i++) {
+			builder.append(this.sequence[i]);
+			builder.append(", ");
 		}
+
+		if(this.size != 0) {
+			builder.append(this.sequence[this.size - 1]);
+		}
+
 		builder.append(" ]");
 		return builder.toString();
 	}
+
+
+	private boolean checkElementEquals(String elem0, String elem1) {
+		if(elem0 == null)
+			return elem0 == elem1;
+		else 
+			return elem0.equals(elem1);		
+	}
+
+	private void realloc() {
+		String[] resized = new String[sequence.length * 2];
+		for (int i = 0; i < this.sequence.length; i++) {
+			resized[i] = this.sequence[i];
+		}
+
+		this.sequence = resized;
+	}
+
+
 }
