@@ -1,93 +1,44 @@
 package datastructures;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+/**
+ * This is a sorted singly linked list implementation.
+ * @author Lukas Kurtyan (910429-5614) & Gustav Alm Rosenblad (910624-3570) Group 14
+ * @param <E>
+ */
+public class SortedLinkedCollection<E extends Comparable<? super E>> extends LinkedCollection<E>{
 
-import datastructures.LinkedCollection.Entry;
-import testSortCol.CollectionWithGet;
-
-public class SortedLinkedCollection<E extends Comparable<? super E>> extends LinkedCollection<E> implements CollectionWithGet<E>, Iterable<E> {
-
-
+	
+	/**
+	 * Adds an element to the collection. 
+	 * The element is placed according to its natural order.
+	 * @param The element to be inserted
+	 * @return true if the element was successfully placed in the collection
+	 * @throws NullPointerException if element is null
+	 */
 	@Override
 	public boolean add(E element){
 		if ( element == null ){
 			throw new NullPointerException();
 		}
-
-		SortedLinkedCollectionIterator it = new SortedLinkedCollectionIterator();
-		while(it.hasNext()){
-			Entry next = it.next;
-			if(element.compareTo(next.element)<=0){
-				it.next = new Entry( element, it.next);
+		
+		if(head == null) {
+			this.head = new Entry(element, null);
+			return true;
+		} else if(head.element.compareTo(element) <= 0) {
+			this.head = new Entry(element, head);
+			return true;
+		}
+		
+		Entry next = head;		
+		while(next.next != null) {
+			next = next.next;
+			if(next.element.compareTo(element) <= 0) {
+				next.next = new Entry(element, next.next);
 				return true;
 			}
-			it.next();
 		}
-		return false;
+		
+		next.next = new Entry(element, null);
+		return true;
 	}
-
-	@Override
-	public E get(E e) {
-		Iterator<E> it = new SortedLinkedCollectionIterator();
-		while(it.hasNext()){
-			E next = it.next();
-			if(e.compareTo(next)==0){
-				return next;
-			}
-		}
-		return null;
-	}
-	
-	@Override
-	public Iterator<E> iterator(){
-		return new SortedLinkedCollectionIterator();
-	}
-	
-	private class SortedLinkedCollectionIterator
-	implements Iterator<E>         {
-
-		Entry   next, previous;
-		boolean removeAllowed;
-
-		SortedLinkedCollectionIterator() {
-			next          = head;
-			previous      = null;
-			removeAllowed = false;
-		} //  constructor LinkedCollectionIterator
-
-		public boolean hasNext() {
-			return next != null;
-		}  //  hasNext
-
-		public E next() {
-			try {
-				previous      = next;
-				next          = next.next;
-				removeAllowed = true;
-				return previous.element;
-			}
-			catch(NullPointerException npe) {
-				throw new NoSuchElementException();
-			} //  next
-
-		} // next 
-
-		public void remove() {
-			if ( removeAllowed ) {
-				if ( previous == head )
-					head = head.next;
-				else {
-					Entry p = head;
-					while ( p.next != previous )
-						p = p.next;
-					p.next = p.next.next;
-				}
-				removeAllowed = false;
-			}
-			else
-				throw new IllegalStateException();
-		}  //  remove 
-
-	}  // class LinkedCollectionIterator
 }

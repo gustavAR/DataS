@@ -1,7 +1,5 @@
 package datastructures;
 
-import java.util.*;
-
 /**
  *  A binary searchtree ordered by the
  *  method compareTo for the elements and
@@ -37,7 +35,8 @@ public class AVL_Tree<E extends Comparable<? super E>>
        
     }  //  class AVL_Entry
 
-    private int height( Entry t ) {
+    @SuppressWarnings("unchecked")
+	private int height( Entry t ) {
 	if ( t == null )
 	    return 0;
 	else 

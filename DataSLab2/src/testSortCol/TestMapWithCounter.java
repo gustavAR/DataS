@@ -1,6 +1,5 @@
 package testSortCol;
 import java.util.*;
-import datastructures.*;
 
 /**
  *  This is a <tt>Map</tt> that uses the <tt>CollectionWithGet</tt>

@@ -1,3 +1,5 @@
+package testframe;
+
 import java.awt.event.*;
 import java.io.*;
 import java.text.*;
@@ -7,7 +9,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Container;
-import datastructures.*; 
 import testSortCol.*;
 
 /**
@@ -19,6 +20,7 @@ import testSortCol.*;
  * presenteras antalet jämförelser av nycklar som behövdes, den tid
  * det tog och hela referenslistan.
  */
+@SuppressWarnings("serial")
 public class TestFrame extends JFrame implements ActionListener {
 
   Scanner textfil = new Scanner( System.in );
@@ -28,10 +30,10 @@ public class TestFrame extends JFrame implements ActionListener {
     /*  ***** Här skall ni definiera era samlingar !!!  ***** */   
    
     CollectionWithGet<TestMapWithCounter.TestMapEntry<String,List<Integer>>>
-	containerSLC   =   ,
-	containerBST   =   ,
-        containerAVL   =   ,
-        containerSplay =   ;
+	containerSLC   =  new SortedLinkedCollectionWithGet<>() ,
+	containerBST   =  new BSTwithGet<>() ,
+        containerAVL   =   new AVLwithGet<>(),
+        containerSplay =   new SplayTreewithGet<>();
     
     /*    **************************************************  */   
 
