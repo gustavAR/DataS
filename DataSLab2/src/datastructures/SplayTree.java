@@ -1,9 +1,24 @@
 package datastructures;
 
+/**
+ * A balanced binary search tree tree that re-balances itself on searches.
+ * @author Lukas Kurtyan (910429-5614) & Gustav Alm Rosenblad (910624-3570) Group 31
+ */
 public class SplayTree<E extends Comparable<? super E>> extends BinarySearchTree<E> {
 	
-	
+
+
 	@Override
+	/**
+	 * Finds the entry containing the element.
+	 * If the element was not found, returns null.
+	 * The entry containing the element, or the entry 
+	 * on which the search was terminated, will become
+	 * the new root.
+	 * 
+	 * @param elem The element we search for
+	 * @returns The entry in which elem was found. Null if elem wasn't found.
+	 */
 	protected Entry find(E elem,
 			Entry t) {		
 		if ( t == null )
@@ -33,7 +48,10 @@ public class SplayTree<E extends Comparable<? super E>> extends BinarySearchTree
 	
 	
 	private void splay(Entry x) {
-		if(x.parent == null) return;
+		if(x.parent == null){
+			this.root = x;
+			return;
+		}
 		
 		Entry z = x.parent.parent;
 		
@@ -43,6 +61,7 @@ public class SplayTree<E extends Comparable<? super E>> extends BinarySearchTree
 			} else {
 				zig(x);
 			}
+			this.root = x;
 			return;
 		}
 		
