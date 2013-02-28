@@ -3,7 +3,7 @@ import java.util.*;
 
 public class DirectedGraph<E extends Edge> {
     
-	private final Set<E>[] nodes;
+	private final List<E>[] nodes;
 	private int numEdges;
 	
 	/**
@@ -20,11 +20,11 @@ public class DirectedGraph<E extends Edge> {
 	 * @param noOfNodes Number of sets in the returned array
 	 * @return An initialized array of sets
 	 */
-	private Set<E>[] CreateSetNodes(int noOfNodes) {
+	private List<E>[] CreateSetNodes(int noOfNodes) {
 		@SuppressWarnings("unchecked")
-		Set<E>[] list = new Set[noOfNodes];		
+		List<E>[] list = new List[noOfNodes];		
 		for (int i = 0; i < noOfNodes; i++) {
-			list[i] = new HashSet<E>();	
+			list[i] = new ArrayList<E>();	
 		}
 		return list;
 	}
@@ -81,14 +81,14 @@ public class DirectedGraph<E extends Edge> {
 			
 
 	public Iterator<E> minimumSpanningTree() {
-		Set<E>[] cc = CreateSetNodes(this.nodes.length);
+		List<E>[] cc = CreateSetNodes(this.nodes.length);
 		Queue<E> queue = new PriorityQueue<E>(this.numEdges, new CompKruskalEdge());
 		fillQueue(queue);
 		
 		while(!queue.isEmpty()) {
 		     E edge = queue.poll();
-		     Set<E> from = cc[edge.from];
-		     Set<E> to = cc[edge.to];
+		     List<E> from = cc[edge.from];
+		     List<E> to = cc[edge.to];
 		     
 		     if(from != to) {    	 
 		    	 if(from.size() > to.size()) {
@@ -106,7 +106,7 @@ public class DirectedGraph<E extends Edge> {
 		return cc[0].iterator();
 	}
 	
-	private void mergeAndCorrectCC(Set<E>[] cc, Set<E> from, Set<E> to) {
+	private void mergeAndCorrectCC(List<E>[] cc, List<E> from, List<E> to) {
 		for (E e : from) {
 		    to.add(e);	
 		    
@@ -117,7 +117,7 @@ public class DirectedGraph<E extends Edge> {
 	}
 
 	private void fillQueue(Queue<E> queue) {
-		for (Set<E> node : this.nodes) {
+		for (List<E> node : this.nodes) {
 			for (E edge : node) {
 				queue.add(edge);				
 			}			
