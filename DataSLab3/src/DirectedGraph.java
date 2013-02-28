@@ -6,11 +6,20 @@ public class DirectedGraph<E extends Edge> {
 	private final Set<E>[] nodes;
 	private int numEdges;
 	
+	/**
+	 * Constructs a directed graph
+	 * @param noOfNodes Number of nodes in the graph
+	 */
 	public DirectedGraph(int noOfNodes) {
 		this.nodes = CreateSetNodes(noOfNodes);
 		this.numEdges = 0;
 	}
 
+	/**
+	 * Creates an array of empty (not null) sets
+	 * @param noOfNodes Number of sets in the returned array
+	 * @return An initialized array of sets
+	 */
 	private Set<E>[] CreateSetNodes(int noOfNodes) {
 		@SuppressWarnings("unchecked")
 		Set<E>[] list = new Set[noOfNodes];		
@@ -20,6 +29,10 @@ public class DirectedGraph<E extends Edge> {
 		return list;
 	}
 	
+	/**
+	 * Tries to add an edge to the appropriate node
+	 * @param e edge to add
+	 */
 	public void addEdge(E e) {
 		if(e.from < nodes.length &&
 		   e.to   < nodes.length   &&
@@ -33,6 +46,13 @@ public class DirectedGraph<E extends Edge> {
 		}
 	}
 
+	/**
+	 * Returns an iterator over the shortest path 
+	 * between the two parameter nodes
+	 * @param from Startnode
+	 * @param to Endnode
+	 * @return An iterator over the sh
+	 */
 	public Iterator<E> shortestPath(int from, int to) {
 		Queue<ComparableDijkstraPath> queue = new PriorityQueue<ComparableDijkstraPath>();
 		queue.add(new ComparableDijkstraPath(from));
